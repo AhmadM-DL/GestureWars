@@ -12,7 +12,7 @@ def recognition_handler(result: HandLandmarkerResult, output_image: mp.Image, ti
     global landmarks
     landmarks = result
 
-model_path = 'hand_landmarker.task'
+model_path = '../assets/hand_landmarker_model.task'
 
 options = HandLandmarkerOptions(
 base_options= BaseOptions(model_asset_path=model_path),
@@ -25,7 +25,7 @@ result_callback= recognition_handler)
 
 if __name__ == "__main__":
 
-    vid = cv2.VideoCapture(1)     
+    vid = cv2.VideoCapture(0)     
 
     landmarker = HandLandmarker.create_from_options(options)
 
