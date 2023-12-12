@@ -73,18 +73,21 @@ ai_controller = AIController(cv2.VideoCapture(0), "../assets/hand_landmarker_mod
 LEFT = pygame.USEREVENT + 1
 RIGHT = pygame.USEREVENT + 2
 SHOOT = pygame.USEREVENT + 3
+STRAIGHT = pygame.USEREVENT + 4
 
 # Main game loop
 while True:
 
     movement = ai_controller.control()
-    # print(movement)
+    #print(movement)
     if movement == Controlles.LEFT:
         pygame.event.post(pygame.event.Event(LEFT)) 
     elif movement == Controlles.RIGHT:
         pygame.event.post(pygame.event.Event(RIGHT))
     elif movement == Controlles.SHOOT:
         pygame.event.post(pygame.event.Event(SHOOT))
+    elif movement == Controlles.STRAIGHT:
+        pygame.event.post(pygame.event.Event(STRAIGHT))
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

@@ -44,13 +44,14 @@ class AIController:
         # detect handedness
         self.detector.detect_async(mp_image, int(timestamp_ms))
 
-        # infere index movement
+        # detect movement
         movement = self.__infere_movement__()
 
         # show camera window
         if(self.show_camera_window):
             # add annotations
             self.__annotate_hand__(frame)
+            self.__annotate_control__(frame, movement)
             cv2.imshow('frame', frame) 
 
         return movement
@@ -62,7 +63,7 @@ class AIController:
 
         # index tip near the hand center
         index_tip_relative_hand_center = self.hand_world_landmarks[4]
-        if(abs(index_tip_relative_hand_center.y) <0.041):
+        if(abs(index_tip_relative_hand_center.y) <0.04):
             return Controlles.SHOOT
         else:
             # index movment detector
@@ -82,9 +83,12 @@ class AIController:
                 center = (int(landmark.x*frame.shape[1]), int(landmark.y*frame.shape[0]))
                 color_index = math.ceil(i/4)
                 cv2.circle(frame, center, 2, self.hand_colors[color_index], 2)
+
+    def __annotate_control__(self, frame: cv2.Mat, movement: Controlles) -> None:
+        cv2.putText(frame, movement.name, (10, 20), cv2.FONT_HERSHEY_COMPLEX_SMALL, 0.5, (0,0,0), 1)
     
     def __detection_handler__(self, result: HandLandmarkerResult, output_image: mp.Image, timestamp_ms: int ) -> None:
-        if(result!=[]):
+        if(result.hand_landmarks!=[]):
             self.hand_landmarks = result.hand_landmarks[0]
             self.hand_world_landmarks = result.hand_world_landmarks[0]
         else:
